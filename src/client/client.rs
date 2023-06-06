@@ -3,11 +3,10 @@ use std::{
     net::{IpAddr, Ipv4Addr, SocketAddr, TcpStream},
     str::from_utf8,
     time::Duration,
+    vec,
 };
 
-
-// client example
-fn client() -> std::io::Result<()> {
+fn main() -> std::io::Result<()> {
     let port = 34254;
     let ip = Ipv4Addr::new(127, 0, 0, 1);
     let socket = SocketAddr::new(IpAddr::V4(ip), port);
@@ -17,10 +16,11 @@ fn client() -> std::io::Result<()> {
             let ip = ip.to_string();
             loop {
                 let mut buffer = String::new();
-                // TODO: somehow this does not work unless is a println!
-                print!("{ip}:{port}>");
+                print!("{ip}:{port}> ");
                 let stdin = std::io::stdin();
+                let mut stdout = std::io::stdout();
                 let mut handle = stdin.lock();
+                stdout.flush()?;
 
                 handle.read_line(&mut buffer)?;
                 stream.write(buffer.as_bytes())?;
